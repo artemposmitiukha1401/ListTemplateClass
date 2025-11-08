@@ -24,6 +24,7 @@ public:
 	int GetCount() const;
 	void Insert(ElementType new_node, int position);
 	void RemoveAt(int position);
+	int Find(ElementType value);
 };
 template <class ElementType>
 List<ElementType>::List()
@@ -46,30 +47,30 @@ void List<ElementType>::Insert(ElementType new_node, const int position) {
 	try {
 		if (position < 0 || position > count) throw std::out_of_range("Position out of range");
 
-		Element<ElementType>* previousElement = head;
-		Element<ElementType>* currentElement = new Element<ElementType>();
-		currentElement->data = new_node;
-		currentElement->next = nullptr;
+		Element<ElementType>* previous_element = head;
+		Element<ElementType>* current_element = new Element<ElementType>();
+		current_element->data = new_node;
+		current_element->next = nullptr;
 
 		if (position == 0) {
-			currentElement->next = head;
-			head = currentElement;
-			if (tail == nullptr) tail = currentElement;
+			current_element->next = head;
+			head = current_element;
+			if (tail == nullptr) tail = current_element;
 			count++;
 			return;
 		}
 
 		int currentPosition = 0;
 		while (currentPosition < position - 1) {
-			previousElement = previousElement->next;
+			previous_element = previous_element->next;
 			currentPosition++;
 		}
 
-		currentElement->next = previousElement->next;
-		previousElement->next = currentElement;
+		current_element->next = previous_element->next;
+		previous_element->next = current_element;
 
-		if (currentElement->next == nullptr) {
-			tail = currentElement;
+		if (current_element->next == nullptr) {
+			tail = current_element;
 		}
 
 		count++;
@@ -114,6 +115,21 @@ void List<ElementType>::RemoveAt(int position) {
 		std::cerr << e.what() << std::endl;
 	}
 
+}
+
+template<class ElementType>
+int List<ElementType>::Find(ElementType value) {
+	Element<ElementType>* current_element = head;
+
+	int current_element_index = 0;
+	while (current_element != nullptr) {
+		if (current_element->data == value) return current_element_index;
+		current_element = current_element->next;
+
+
+		++current_element_index;
+	}
+	return -1;
 }
 
 template <class ElementType>
@@ -179,6 +195,7 @@ int main()
 	list.Insert("dfs", 3);
 	// list.RemoveAt(4);
 	list.Print();
+	std::cout << list.Find("Hello");
 
 
 }
